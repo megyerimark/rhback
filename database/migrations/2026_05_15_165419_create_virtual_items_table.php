@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('virtual_items', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('category');
+            $table->string('image_url');
+            $table->integer('price_ravecoin')->unsigned()->default(0);
             $table->timestamps();
         });
     }

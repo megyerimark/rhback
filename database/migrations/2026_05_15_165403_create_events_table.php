@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->dateTime('event_date');
+            $table->string('embedded_media_url')->nullable(); // spotyfy, youtube, soundcloud link
             $table->timestamps();
         });
     }
