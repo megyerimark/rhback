@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +18,9 @@ route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])->name
 Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
-});
+    return $request->user();});
+
+route::get("/events", [EventController::class, 'index']);
+route::post("/events", [EventController::class, 'store']);
 
 });
