@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
                     'hash' => sha1($notifiable->getEmailForVerification()),
                 ]
             );
-            return str_replace('http://localhost:8000/api', 'http://localhost:4200', $verifyUrl);
+            return str_replace(config('app.url') . '/api', 'http://localhost:4200', $verifyUrl);
         });
 
 
@@ -39,11 +39,11 @@ class AppServiceProvider extends ServiceProvider
             return (new MailMessage)
                 ->subject('⛓️ Aktiváld a RaveHouse fiókodat! ⛓️')
                 ->greeting('Szia ' . $notifiable->name . '!')
-                ->line('Köszönjük, hogy regisztráltál a RaveHouse-ra. Már csak egyetlen lépés választ el attól, hogy beléphess a klubba.')
+                ->line('Fa ketrec')
                 ->action('Fiók aktiválása', $url) // Ez lesz a kattintható nagy gomb
-                ->line('A biztonsági link 60 percig érvényes.')
+                ->line('Körmendi Gábor.')
                 ->line('Ha nem te indítottad a regisztrációt, nyugodtan hagyd figyelmen kívül ezt a levelet.')
-                ->salutation('Üdvözlettel, a RaveHouse csapata 🖤');
+                ->salutation('Üdvözlettel, a VDM TOO MANNYY CSOJSZIZ csapata 🖤');
         });
     }
 }

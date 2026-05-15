@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Events\Verified; // Ez hiányzott a tetejéről!
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -40,6 +40,15 @@ class AuthController extends Controller
     // 2. EMAIL MEGERŐSÍTÉS (Aktiválás az Angular felől)
     public function verify(Request $request, $id, $hash)
     {
+        // SPA FIX: Az Angular URL-kezelése miatt a '+' jelekből szóközök lesznek.
+        // Ha jött signature és van benne szóköz, visszaalakítjuk '+'-ra, különben elbukik az ellenőrzés!
+        if ($request->has('signature')) {
+            $request->merge([
+                'signature' => str_replace(' ', '+', $request->query('signature'))
+            ]);
+        }
+
+        // Most már biztonságosan ellenőrizhetjük a Laravel gyári rendszerével
         if (! $request->hasValidSignature()) {
             return response()->json(['message' => 'Érvénytelen vagy lejárt aláírás.'], 401);
         }
@@ -61,7 +70,7 @@ class AuthController extends Controller
         return response()->json(['message' => 'Sikeres email megerősítés!'], 200);
     }
 
-    // 3. BEJELENTKEZÉS (Különválasztva, aktiválás ellenőrzéssel!)
+    // 3. BEJELENTKEZÉS
     public function login(Request $request)
     {
         $request->validate([
@@ -75,12 +84,10 @@ class AuthController extends Controller
             return response()->json(['message' => 'Hibás email vagy jelszó.'], 401);
         }
 
-        // Ha még nincs aktiválva, nem engedjük be!
         if (!$user->hasVerifiedEmail()) {
             return response()->json(['message' => 'Kérlek, először aktiváld a fiókodat az emailben kapott linkre kattintva.'], 403);
         }
 
-        // Ha minden jó, generáljuk a tokent
         $token = $user->createToken('ravehouse_auth_token')->plainTextToken;
 
         return response()->json([
