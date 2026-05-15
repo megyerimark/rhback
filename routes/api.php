@@ -31,5 +31,13 @@ Route::post('/events/{eventId}/reviews', [ReviewController::class, 'store']);
 Route::get('/shop', [ShopController::class, 'index']);
 Route::post('/shop/buy/{itemId}', [ShopController::class, 'buy']);
 
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::get('/me', function (Request $request) {
+        return response()->json([
+            'user' => $request->user()->load('virtualItems'),
+            'roles' => $request->user()->getRoleNames()
+        ], 200);
+    });
+
 
 });
