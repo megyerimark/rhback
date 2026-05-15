@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Review;
+use App\Models\virtualItem;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -31,5 +33,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function virtualItems()
+    {
+        return $this->belongsToMany(virtualItem::class, 'user_items')->withPivot('acquired_at');
     }
 }

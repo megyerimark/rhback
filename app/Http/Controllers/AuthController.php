@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -52,33 +53,33 @@ class AuthController extends Controller
         }
 
         //Bejelentkezés
-        public function login(Request $request){
-            $request->validate([
-                'email' => 'required|email',
-                'password' => 'required',
-            ]);
-            $user = User::where('email', $request->email)->first();
+       public function login(Request $request){
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+        
+        $user = User::where('email', $request->email)->first();
 
-
-            if(!user || ! Hash::check($request->password, $user->password))
-            {
-                return response()->json(['message' => 'Hibás email vagy jelszó.'], 401);
-            }
-
-            if (!$user->hasVerifiedEmail()) {
-                return response()->json(['message' => 'Kérlek, először aktiváld a fiókodat az emailben kapott linkre kattintva.'], 403);
-            }
-
-
-            $token = $user->createToken('ravehiuse_auth_token')->plainTextToken;
-
-            return response()->json([
-                'message' => 'Sikeres bejelentkezés a RaveHouse-ba!',
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-                'user' => $user, 
-                'role' => $user->getRoleNames(), 
-            ], 200);
+        // ITT A JAVÍTÁS: !$user
+        if(!$user || ! Hash::check($request->password, $user->password))
+        {
+            return response()->json(['message' => 'Hibás email vagy jelszó.'], 401);
         }
+
+        if (!$user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Kérlek, először aktiváld a fiókodat az emailben kapott linkre kattintva.'], 403);
+        }
+
+        $token = $user->createToken('ravehouse_auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Sikeres bejelentkezés a RaveHouse-ba!',
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user, 
+            'roles' => $user->getRoleNames(), 
+        ], 200);
+    }
 
 }
