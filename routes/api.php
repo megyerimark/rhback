@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +23,9 @@ Route::get('/user', function (Request $request) {
 
 route::get("/events", [EventController::class, 'index']);
 route::post("/events", [EventController::class, 'store']);
+
+Route::get('/events/{eventId}/reviews', [ReviewController::class, 'index']);
+Route::post('/events/{eventId}/reviews', [ReviewController::class, 'store']);
+
 
 });
