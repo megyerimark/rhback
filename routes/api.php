@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,9 @@ route::post("/events", [EventController::class, 'store']);
 
 Route::get('/events/{eventId}/reviews', [ReviewController::class, 'index']);
 Route::post('/events/{eventId}/reviews', [ReviewController::class, 'store']);
+
+Route::get('/shop', [ShopController::class, 'index']);
+Route::post('/shop/buy/{itemId}', [ShopController::class, 'buy']);
 
 
 });
