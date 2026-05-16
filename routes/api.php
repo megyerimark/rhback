@@ -58,5 +58,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
             'roles' => $request->user()->getRoleNames()
         ], 200);
     });
+    Route::post('/events/sync-facebook', [EventController::class, 'syncFacebookEvents']);
 
 });
