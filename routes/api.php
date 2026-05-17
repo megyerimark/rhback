@@ -31,6 +31,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
 
+    Route::post('/shop-items', [ShopItemController::class, 'store']);
+    Route::get('/shop-items', [ShopItemController::class, 'index']);
+
+    // Az Avatar felszerelés mentése
+    Route::post('/avatar/save', [AvatarController::class, 'saveLoadout']);
+
     // --- 🚨 ÚJ: ADMIN DAHSBOARD VÉGPONT ---
     // Lekéri az összes felhasználót a Spatie rangjukkal (roles) együtt az Angular táblázathoz
     Route::get('/users', function () {
